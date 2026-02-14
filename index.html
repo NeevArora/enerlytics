@@ -11,155 +11,158 @@
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
-body { background-color:#020617; color:#f8fafc; font-family:'Plus Jakarta Sans',sans-serif; scroll-behavior:smooth; }
+body { background:#020617; color:#f8fafc; font-family:'Plus Jakarta Sans',sans-serif; scroll-behavior:smooth; }
 .glass { background:rgba(255,255,255,0.03); backdrop-filter:blur(15px); border:1px solid rgba(255,255,255,0.1); }
 .gradient-text { background:linear-gradient(90deg,#60a5fa,#a855f7); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
-#timerContainer { background:#ffffff; color:#020617; box-shadow:0 10px 40px rgba(0,0,0,0.8); border:3px solid #3b82f6; z-index:1000; }
-.timer-warning { border:3px solid #ef4444 !important; color:#b91c1c !important; }
-.timer-stop { background-color:#991b1b !important; color:#ffffff !important; border:3px solid #f87171 !important; }
+#timerContainer { background:#fff; color:#020617; border:3px solid #3b82f6; }
 </style>
 </head>
 
 <body onload="startTimer()">
 
 <!-- TIMER -->
-<div id="timerContainer" class="fixed bottom-10 right-10 px-8 py-4 rounded-3xl flex items-center gap-4 transition-all">
-<i class="fas fa-hourglass-start text-blue-600 text-2xl" id="timerIcon"></i>
-<span id="displayTime" class="text-4xl font-black font-mono tracking-tighter">00:00</span>
+<div id="timerContainer" class="fixed bottom-10 right-10 px-6 py-3 rounded-2xl flex items-center gap-3 shadow-lg">
+<i class="fas fa-hourglass-start text-blue-600"></i>
+<span id="displayTime" class="text-xl font-black font-mono">00:00</span>
 </div>
 
 <!-- NAV -->
-<nav class="fixed w-full z-50 glass border-b border-slate-800/50 px-8 py-4 flex justify-between items-center">
-<div class="flex flex-col">
+<nav class="fixed w-full glass border-b border-slate-800/50 px-8 py-4 flex justify-between items-center">
+<div>
 <span class="text-xl font-black">PBL <span class="text-blue-500">2026</span></span>
-<span class="text-[10px] text-slate-400 uppercase">Dept. of CSE | Manipal University Jaipur</span>
+<div class="text-[10px] text-slate-400 uppercase">Dept. of CSE | Manipal University Jaipur</div>
 </div>
+<a href="dashboard.html" class="bg-green-600 px-4 py-2 rounded-full text-xs font-bold hover:bg-green-500 transition">
+Open ML Dashboard
+</a>
 </nav>
 
-<main class="max-w-6xl mx-auto px-6 pt-48 pb-32 space-y-32">
+<main class="max-w-6xl mx-auto px-6 pt-40 pb-20 space-y-24">
 
 <!-- HERO -->
 <section class="text-center">
-<div class="inline-block px-4 py-1 border border-slate-800 rounded-full text-slate-500 text-[10px] font-mono mb-6 uppercase tracking-widest">
+<div class="inline-block px-4 py-1 border border-slate-800 rounded-full text-slate-500 text-xs font-mono mb-6 uppercase">
 ID: 2427030417
 </div>
 
-<h1 class="text-6xl md:text-7xl font-extrabold mb-8 uppercase leading-tight">
+<h1 class="text-6xl font-extrabold mb-6 uppercase">
 <span class="gradient-text">Enerlytics</span>
 </h1>
 
-<p class="text-slate-400 max-w-2xl mx-auto italic text-lg leading-relaxed border-l-2 border-blue-500/30 pl-6 text-left">
-"An intelligent energy forecasting dashboard that predicts daily electricity consumption using Multiple Linear Regression and estimates monthly cost for improved planning and analysis."
+<p class="text-slate-400 max-w-2xl mx-auto italic text-lg leading-relaxed">
+An intelligent energy forecasting dashboard that predicts daily electricity consumption 
+using Multiple Linear Regression and estimates monthly cost for improved planning.
 </p>
 </section>
 
-<!-- PROBLEM -->
-<section class="glass p-12 rounded-3xl">
-<h2 class="text-3xl font-extrabold mb-6">Problem Statement</h2>
+<!-- PROBLEM + LITERATURE + GAP -->
+<section id="problem" class="grid md:grid-cols-2 gap-12">
+<div class="glass p-8 rounded-3xl">
+<h2 class="text-2xl font-bold mb-4">Problem Statement</h2>
 <p class="text-slate-400 leading-relaxed text-justify">
 Electricity consumption varies due to temperature and usage patterns. 
-Manual estimation of future consumption leads to inaccurate billing predictions and poor planning. 
-This project aims to build a machine learning-based forecasting system that predicts next-day energy usage and estimates monthly electricity cost efficiently.
+Manual estimation leads to inaccurate billing predictions and poor planning. 
+This project builds a machine learning-based forecasting system to predict 
+next-day energy usage and estimate monthly cost efficiently.
 </p>
+</div>
+
+<div class="space-y-6">
+<div class="glass p-6 rounded-2xl border-r-4 border-blue-500/50">
+<h3 class="text-blue-400 font-bold text-sm mb-2">Literature Review / Market Research</h3>
+<p class="text-slate-400 text-sm leading-relaxed">
+Existing energy monitoring systems mainly track usage and show basic statistics. 
+Some research papers use machine learning to predict energy consumption, 
+but many solutions are complex, expensive, or not user-friendly. 
+Most systems do not provide simple insights that common users can easily understand.
+</p>
+</div>
+
+<div class="glass p-6 rounded-2xl border-r-4 border-purple-500/50">
+<h3 class="text-purple-400 font-bold text-sm mb-2">Research Gap / Innovation</h3>
+<p class="text-slate-400 text-sm leading-relaxed">
+Enerlytics provides a lightweight, interpretable Multiple Linear Regression model 
+with real-time visualization and cost estimation for practical users.
+</p>
+</div>
+</div>
 </section>
 
 <!-- METHODOLOGY -->
 <section>
-<h2 class="text-4xl font-black text-center uppercase tracking-tight mb-12">
+<h2 class="text-3xl font-black text-center mb-12">
 System <span class="text-blue-500">Methodology</span>
 </h2>
 
 <div class="grid md:grid-cols-3 gap-8">
-
-<div class="glass p-8 rounded-3xl text-center">
-<i class="fas fa-database text-blue-500 text-3xl mb-4"></i>
-<h3 class="font-bold mb-2 uppercase text-xs tracking-widest">Dataset</h3>
-<p class="text-sm text-slate-500">
-365 daily records containing temperature and energy consumption values.
-</p>
+<div class="glass p-6 rounded-2xl text-center">
+<i class="fas fa-database text-blue-500 text-2xl mb-3"></i>
+<h3 class="font-bold text-sm mb-2">Dataset</h3>
+<p class="text-slate-400 text-sm">365 daily records with temperature and energy values.</p>
 </div>
 
-<div class="glass p-8 rounded-3xl text-center">
-<i class="fas fa-microchip text-purple-500 text-3xl mb-4"></i>
-<h3 class="font-bold mb-2 uppercase text-xs tracking-widest">Model Used</h3>
-<p class="text-sm text-slate-500">
-Multiple Linear Regression using Time Index and Average Temperature.
-</p>
+<div class="glass p-6 rounded-2xl text-center">
+<i class="fas fa-microchip text-purple-500 text-2xl mb-3"></i>
+<h3 class="font-bold text-sm mb-2">Model</h3>
+<p class="text-slate-400 text-sm">Multiple Linear Regression using Time + Temperature.</p>
 </div>
 
-<div class="glass p-8 rounded-3xl text-center border-2 border-green-500/20 bg-green-500/5">
-<i class="fab fa-github text-green-500 text-3xl mb-4"></i>
-<h3 class="font-bold mb-4 uppercase text-xs tracking-widest text-green-400">GitHub Repository</h3>
-<a href="dashboard.html" target="_blank"
-class="px-6 py-2 bg-green-600 rounded-full text-[10px] font-black hover:bg-green-500 transition">
-VIEW LIVE DASHBOARD
+<div class="glass p-6 rounded-2xl text-center">
+<i class="fab fa-github text-green-500 text-2xl mb-3"></i>
+<h3 class="font-bold text-sm mb-2">Repository</h3>
+<a href="https://github.com/NeevArora/enerlytics" target="_blank"
+class="bg-green-600 px-4 py-2 rounded-full text-xs font-bold hover:bg-green-500 transition">
+View GitHub
 </a>
 </div>
-
 </div>
 </section>
 
 <!-- RESULTS -->
-<section class="glass p-12 rounded-3xl border-t-4 border-blue-500">
-<h2 class="text-3xl font-black mb-12 text-center uppercase tracking-tight">
+<section class="glass p-8 rounded-3xl">
+<h2 class="text-2xl font-bold mb-8 text-center">
 Results & <span class="text-blue-500">Evaluation</span>
 </h2>
 
-<div class="grid md:grid-cols-2 gap-16 items-center">
-
-<div class="h-80">
+<div class="grid md:grid-cols-2 gap-12 items-center">
+<div class="h-64">
 <canvas id="resultsChart"></canvas>
 </div>
 
-<div class="space-y-6">
-<div class="p-6 rounded-2xl bg-white/5 flex justify-between items-center border border-white/10">
-<span class="text-slate-400 font-bold uppercase text-xs tracking-widest">R² Score</span>
-<span class="text-blue-400 font-mono font-black text-3xl">0.82</span>
+<div>
+<div class="p-4 rounded-xl bg-white/5 border border-white/10 text-center">
+<div class="text-slate-400 text-xs uppercase mb-2">R² Score</div>
+<div class="text-3xl font-black text-blue-400">0.82</div>
 </div>
-
-<p class="text-slate-500 text-sm italic text-justify leading-relaxed">
-The model achieved an R² score of approximately 0.82 on test data, indicating strong correlation between predicted and actual energy usage values.
-</p>
 </div>
-
 </div>
 </section>
 
 <!-- TEAM -->
-<section class="text-center pt-10 border-t border-slate-900">
-<h2 class="text-[10px] font-black text-slate-600 uppercase tracking-[0.5em] mb-12">
-Academic Credits
-</h2>
+<section class="text-center pt-10 border-t border-slate-800">
+<h3 class="text-xs uppercase tracking-widest text-slate-500 mb-8">Academic Credits</h3>
 
 <div class="flex flex-wrap justify-center gap-10">
-
-<div class="glass px-12 py-8 rounded-2xl border-b-4 border-blue-600">
-<p class="text-[9px] font-bold text-blue-500 mb-2 uppercase tracking-widest">Project Guide</p>
-<p class="font-black text-xl text-slate-100">Dr. Sakshi Shringi</p>
+<div class="glass px-8 py-6 rounded-2xl border-b-4 border-blue-600">
+<div class="text-xs text-blue-400 mb-2 uppercase">Project Guide</div>
+<div class="font-bold">Dr. Sakshi Shringi</div>
 </div>
 
-<div class="glass px-12 py-8 rounded-2xl border-b-4 border-slate-700">
-<p class="text-[9px] font-bold text-slate-400 mb-2 uppercase tracking-widest">Student</p>
-<p class="font-black text-xl text-slate-100">Neev Arora</p>
-<p class="text-[10px] text-slate-500 mt-1">2427030417</p>
+<div class="glass px-8 py-6 rounded-2xl border-b-4 border-slate-700">
+<div class="text-xs text-slate-400 mb-2 uppercase">Student</div>
+<div class="font-bold">Neev Arora</div>
+<div class="text-xs text-slate-500">2427030417</div>
 </div>
-
 </div>
 </section>
 
 </main>
 
-<footer class="py-12 text-center bg-black/40 border-t border-slate-900">
-<p class="text-slate-600 text-[10px] font-bold tracking-[0.3em] uppercase mb-2">
-Manipal University Jaipur
-</p>
-<p class="text-slate-500 text-[9px] font-medium tracking-[0.2em] uppercase opacity-50">
-Department of Computer Science & Engineering • 2026
-</p>
+<footer class="py-8 text-center text-slate-500 text-xs border-t border-slate-800">
+Manipal University Jaipur • Department of CSE • 2026
 </footer>
 
 <script>
-// Timer
 let sec=0;
 function startTimer(){
 setInterval(()=>{
@@ -171,30 +174,24 @@ document.getElementById('displayTime').innerText=
 },1000);
 }
 
-// Chart
 new Chart(document.getElementById('resultsChart'),{
 type:'bar',
 data:{
-labels:['Actual Model Performance'],
+labels:['Model Accuracy'],
 datasets:[{
 data:[82],
 backgroundColor:'#3b82f6',
-borderRadius:15,
-barThickness:60
+borderRadius:12
 }]
 },
 options:{
 responsive:true,
 maintainAspectRatio:false,
 plugins:{legend:{display:false}},
-scales:{
-y:{beginAtZero:true,max:100,ticks:{color:'#64748b'}},
-x:{ticks:{color:'#64748b'}}
-}
+scales:{y:{beginAtZero:true,max:100}}
 }
 });
 </script>
 
 </body>
 </html>
-
