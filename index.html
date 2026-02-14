@@ -1,0 +1,457 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Enerlytics</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+:root{
+  --bg1:#0f172a;
+  --bg2:#1e293b;
+  --accent1:#7c3aed;
+  --accent2:#06b6d4;
+  --card:rgba(255,255,255,0.06);
+  --text:#e5e7eb;
+  --muted:#94a3b8;
+}
+
+body{
+  margin:0;
+  font-family:Inter,system-ui;
+  background:radial-gradient(circle at 20% 30%, #1e293b 0%, #0f172a 60%);
+  color:var(--text);
+  overflow-x:hidden;
+}
+
+
+body::before{
+  content:"";
+  position:fixed;
+  top:-200px;
+  left:-200px;
+  width:500px;
+  height:500px;
+  background:radial-gradient(circle, rgba(124,58,237,0.4), transparent 70%);
+  filter:blur(100px);
+  z-index:-1;
+}
+
+body::after{
+  content:"";
+  position:fixed;
+  bottom:-200px;
+  right:-200px;
+  width:500px;
+  height:500px;
+  background:radial-gradient(circle, rgba(6,182,212,0.4), transparent 70%);
+  filter:blur(100px);
+  z-index:-1;
+}
+
+
+.hero{
+  padding:100px 80px 80px;
+}
+
+.hero h1{
+  margin:0;
+  font-size:48px;
+  font-weight:700;
+  background:linear-gradient(90deg,var(--accent1),var(--accent2));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+.hero p{
+  margin-top:18px;
+  max-width:650px;
+  color:var(--muted);
+  line-height:1.7;
+}
+
+
+.container{
+  padding:0 80px 100px;
+  max-width:1400px;
+  margin:auto;
+}
+
+
+.controls{
+  margin-top:30px;
+  display:flex;
+  gap:20px;
+  flex-wrap:wrap;
+}
+
+button{
+  padding:12px 22px;
+  border:none;
+  border-radius:12px;
+  cursor:pointer;
+  font-size:14px;
+  transition:all 0.3s ease;
+}
+
+.primary{
+  background:linear-gradient(90deg,var(--accent1),var(--accent2));
+  color:white;
+}
+
+.primary:hover{
+  transform:translateY(-3px);
+  box-shadow:0 10px 25px rgba(124,58,237,0.4);
+}
+
+.secondary{
+  background:#1e293b;
+  color:white;
+}
+
+.secondary:hover{
+  background:#334155;
+}
+
+.kpi-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:30px;
+  margin:80px 0;
+}
+
+
+.card{
+  background:var(--card);
+  padding:30px;
+  border-radius:20px;
+  backdrop-filter:blur(16px);
+  border:1px solid rgba(255,255,255,0.08);
+  box-shadow:0 25px 50px rgba(0,0,0,0.4);
+  transition:all 0.4s ease;
+}
+
+.card:hover{
+  transform:translateY(-10px);
+  box-shadow:0 35px 60px rgba(0,0,0,0.6);
+  border-color:rgba(124,58,237,0.4);
+}
+
+.card h3{
+  margin:0;
+  font-size:13px;
+  color:var(--muted);
+  text-transform:uppercase;
+  letter-spacing:1px;
+}
+
+
+.kpi{
+  margin-top:18px;
+  font-size:30px;
+  font-weight:700;
+  background:linear-gradient(90deg,#ffffff,#a5b4fc);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+
+.section{
+  margin:120px 0;
+}
+
+.section h2{
+  font-size:26px;
+  margin-bottom:40px;
+  font-weight:600;
+}
+
+
+.chart-box{
+  background:var(--card);
+  padding:40px;
+  border-radius:25px;
+  border:1px solid rgba(255,255,255,0.08);
+  box-shadow:0 30px 60px rgba(0,0,0,0.5);
+}
+
+
+.model-box{
+  background:var(--card);
+  padding:40px;
+  border-radius:25px;
+  line-height:1.9;
+  border:1px solid rgba(255,255,255,0.08);
+  box-shadow:0 30px 60px rgba(0,0,0,0.5);
+}
+</style>
+</head>
+
+<body>
+
+<div class="hero">
+  <h1>Enerlytics</h1>
+  <p>
+  A modern energy forecasting dashboard using multiple linear regression
+  to predict daily consumption and estimate monthly electricity cost.
+  </p>
+</div>
+
+<div class="container">
+
+<div class="controls">
+  <button class="secondary" onclick="loadSample()">Use Sample Data</button>
+  <input type="file" id="csvFile" accept=".csv">
+  <button class="primary" onclick="trainModel()">Train Model</button>
+</div>
+
+<div class="kpi-grid">
+  <div class="card">
+    <h3>Average Usage</h3>
+    <div id="avg" class="kpi">--</div>
+  </div>
+  <div class="card">
+    <h3>Predicted Next Day</h3>
+    <div id="prediction" class="kpi">--</div>
+  </div>
+  <div class="card">
+    <h3>Next Day Cost (₹)</h3>
+    <div id="nextCost" class="kpi">--</div>
+  </div>
+  <div class="card">
+    <h3>Estimated Monthly Bill (₹)</h3>
+    <div id="bill" class="kpi">--</div>
+  </div>
+  <div class="card">
+    <h3>R² Score</h3>
+    <div id="r2" class="kpi">--</div>
+  </div>
+  <div class="card">
+    <h3>MAE</h3>
+    <div id="mae" class="kpi">--</div>
+  </div>
+  
+</div>
+
+<div class="section">
+  <h2>Recent 60-Day Trend</h2>
+  <div class="chart-box">
+    <canvas id="chart"></canvas>
+  </div>
+</div>
+
+<div class="section">
+  <h2>Model Details</h2>
+  <div class="model-box">
+    Model Type: Multiple Linear Regression<br>
+    Features Used: Time Index, Average Temperature<br>
+    Train/Test Split: 80% / 20%<br>
+    Tariff Assumption: ₹6 per kWh
+  </div>
+</div>
+
+</div>
+
+<script>
+let usage=[], temperature=[];
+let chart;
+const costPerUnit = 6;
+
+function normalize(arr){
+  let min=Math.min(...arr);
+  let max=Math.max(...arr);
+  return arr.map(v=>(v-min)/(max-min));
+}
+
+function transpose(m){ return m[0].map((_,i)=>m.map(r=>r[i])); }
+function multiply(a,b){
+  return a.map(r=>b[0].map((_,j)=>r.reduce((s,e,k)=>s+e*b[k][j],0)));
+}
+function multiplyVector(a,b){
+  return a.map(r=>r.reduce((s,e,i)=>s+e*b[i],0));
+}
+
+function inverse3x3(m){
+  let a=m[0][0],b=m[0][1],c=m[0][2];
+  let d=m[1][0],e=m[1][1],f=m[1][2];
+  let g=m[2][0],h=m[2][1],i=m[2][2];
+  let A=e*i-f*h,B=-(d*i-f*g),C=d*h-e*g;
+  let D=-(b*i-c*h),E=a*i-c*g,F=-(a*h-b*g);
+  let G=b*f-c*e,H=-(a*f-c*d),I=a*e-b*d;
+  let det=a*A+b*B+c*C;
+  return [[A/det,D/det,G/det],[B/det,E/det,H/det],[C/det,F/det,I/det]];
+}
+
+function loadSample(){
+  usage=[]; 
+  temperature=[];
+
+  for(let i=0;i<365;i++){
+    let temp = 20 + 10*Math.sin(2*Math.PI*i/365) + (Math.random()-0.5)*6;
+    let val  = 5 + 0.6*temp + (Math.random()-0.5)*10;
+
+    temperature.push(parseFloat(temp.toFixed(2)));
+    usage.push(parseFloat(val.toFixed(2)));
+  }
+
+  updateAvg();
+
+  trainModel();
+}
+
+document.getElementById("csvFile").addEventListener("change",function(e){
+  const reader=new FileReader();
+  reader.onload=function(ev){
+    const rows=ev.target.result.split("\n").slice(1);
+    usage=[]; temperature=[];
+    rows.forEach(r=>{
+      const c=r.split(",");
+      if(c.length>=3){
+        let t=parseFloat(c[1]);
+        let u=parseFloat(c[2]);
+        if(!isNaN(u)&&!isNaN(t)){
+          temperature.push(t);
+          usage.push(u);
+        }
+      }
+    });
+    updateAvg();
+  };
+  reader.readAsText(e.target.files[0]);
+});
+
+function updateAvg(){
+  document.getElementById("avg").textContent=
+  (usage.reduce((a,b)=>a+b,0)/usage.length).toFixed(2)+" kWh";
+}
+
+function trainModel(){
+  if(usage.length<10) return alert("Load data first.");
+
+  let n=usage.length;
+  let time=Array.from({length:n},(_,i)=>i);
+
+  let normTime=normalize(time);
+  let normTemp=normalize(temperature);
+
+  let split=Math.floor(n*0.8);
+
+  let X=[],Y=[];
+  for(let i=0;i<split;i++){
+    X.push([1,normTime[i],normTemp[i]]);
+    Y.push(usage[i]);
+  }
+
+  let XT=transpose(X);
+  let XTX=multiply(XT,X);
+  let inv=inverse3x3(XTX);
+  let XTY=multiplyVector(XT,Y);
+  let beta=multiplyVector(inv,XTY);
+
+  let predictions=[];
+  for(let i=0;i<n;i++){
+    let pred=beta[0]+beta[1]*normTime[i]+beta[2]*normTemp[i];
+    predictions.push(pred);
+  }
+
+  let mae=0,count=0;
+  for(let i=split;i<n;i++){
+    mae+=Math.abs(usage[i]-predictions[i]);
+    count++;
+  }
+  mae=(mae/count).toFixed(3);
+
+  let mean=usage.reduce((a,b)=>a+b,0)/n;
+  let ssTot=0,ssRes=0;
+  for(let i=0;i<n;i++){
+    ssTot+=(usage[i]-mean)**2;
+    ssRes+=(usage[i]-predictions[i])**2;
+  }
+  let r2=(1-ssRes/ssTot).toFixed(3);
+
+  let nextPred=predictions[n-1];
+
+  document.getElementById("prediction").textContent=
+    nextPred.toFixed(2)+" kWh";
+
+  document.getElementById("nextCost").textContent=
+    "₹ "+(nextPred*costPerUnit).toFixed(2);
+
+  document.getElementById("mae").textContent=mae;
+
+  let r2El=document.getElementById("r2");
+  r2El.textContent=r2;
+  r2El.style.color=r2>0.6?"#22c55e":r2>0.3?"#facc15":"#ef4444";
+
+  document.getElementById("bill").textContent=
+    "₹ "+(nextPred*30*costPerUnit).toFixed(0);
+
+  drawChart(usage,predictions);
+}
+
+function drawChart(actual,pred){
+  let display=60;
+  let start=Math.max(0,actual.length-display);
+  let a=actual.slice(start);
+  let p=pred.slice(start);
+  let labels=a.map((_,i)=>"Day "+(start+i+1));
+
+  if(chart) chart.destroy();
+  chart=new Chart(document.getElementById("chart"),{
+    type:"line",
+    data:{
+      labels:labels,
+      datasets:[
+        {
+          label:"Actual",
+          data:a,
+          borderColor:"#7c3aed",
+          borderWidth:3,
+          tension:0.35,
+          pointRadius:0
+        },
+        {
+          label:"Predicted",
+          data:p,
+          borderColor:"#06b6d4",
+          borderDash:[8,6],
+          borderWidth:3,
+          tension:0.35,
+          pointRadius:0
+        }
+      ]
+    },
+    options:{
+      plugins:{
+        legend:{
+          labels:{color:"#cbd5e1"}
+        }
+      },
+      scales:{
+        x:{
+          title:{
+            display:true,
+            text:"Time (Days)",
+            color:"#cbd5e1"
+          },
+          grid:{display:false},
+          ticks:{color:"#94a3b8"}
+        },
+        y:{
+          title:{
+            display:true,
+            text:"Energy Consumption (kWh)",
+            color:"#cbd5e1"
+          },
+          grid:{color:"rgba(255,255,255,0.05)"},
+          ticks:{color:"#94a3b8"}
+        }
+      }
+    }
+  });
+}
+</script>
+
+</body>
+</html>
