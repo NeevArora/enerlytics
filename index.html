@@ -11,10 +11,31 @@
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
-body { background:#020617; color:#f8fafc; font-family:'Plus Jakarta Sans',sans-serif; scroll-behavior:smooth; }
-.glass { background:rgba(255,255,255,0.03); backdrop-filter:blur(15px); border:1px solid rgba(255,255,255,0.1); }
-.gradient-text { background:linear-gradient(90deg,#60a5fa,#a855f7); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
-#timerContainer { background:#fff; color:#020617; border:3px solid #3b82f6; }
+
+body { 
+background:#020617; 
+color:#f8fafc; 
+font-family:'Plus Jakarta Sans',sans-serif; 
+scroll-behavior:smooth; 
+}
+
+.glass { 
+background:rgba(255,255,255,0.03); 
+backdrop-filter:blur(15px); 
+border:1px solid rgba(255,255,255,0.1); 
+}
+
+.gradient-text { 
+background:linear-gradient(90deg,#60a5fa,#a855f7); 
+-webkit-background-clip:text; 
+-webkit-text-fill-color:transparent; 
+}
+
+#timerContainer { 
+background:#fff; 
+color:#020617; 
+border:3px solid #3b82f6; 
+}
 </style>
 </head>
 
@@ -32,7 +53,7 @@ body { background:#020617; color:#f8fafc; font-family:'Plus Jakarta Sans',sans-s
 <span class="text-xl font-black">PBL <span class="text-blue-500">2026</span></span>
 <div class="text-[10px] text-slate-400 uppercase">Dept. of CSE | Manipal University Jaipur</div>
 </div>
-<a href="dashboard.html" class="bg-green-600 px-4 py-2 rounded-full text-xs font-bold hover:bg-green-500 transition">
+<a href="index.html" class="bg-green-600 px-4 py-2 rounded-full text-xs font-bold hover:bg-green-500 transition">
 Open ML Dashboard
 </a>
 </nav>
@@ -55,114 +76,157 @@ using Multiple Linear Regression and estimates monthly cost for improved plannin
 </p>
 </section>
 
-<!-- PROBLEM + LITERATURE + GAP -->
-<section id="problem" class="grid md:grid-cols-2 gap-12">
-<div class="glass p-8 rounded-3xl">
+<!-- PROBLEM -->
+<section class="glass p-8 rounded-3xl">
 <h2 class="text-2xl font-bold mb-4">Problem Statement</h2>
 <p class="text-slate-400 leading-relaxed text-justify">
-
-Electricity consumption in households is often inefficient, leading to higher 
-electricity bills and unnecessary energy wastage. Homeowners usually lack accurate
-tools to predict their future energy usage, which makes planning difficult.
-
-This project aims to develop a machine learning-based forecasting system that predicts
-next-day electricity consumption using historical data and estimates monthly cost. 
-The system helps users optimise their energy usage, reduce expenses, and promote sustainable consumption.
-
+Electricity consumption in households is often inefficient, leading to higher electricity bills and energy wastage.
+Most users lack tools to predict future consumption accurately. 
+This project develops a regression-based forecasting system that predicts next-day usage and estimates monthly billing cost.
 </p>
-</div>
-
-<div class="space-y-6">
-<div class="glass p-6 rounded-2xl border-r-4 border-blue-500/50">
-<h3 class="text-blue-400 font-bold text-sm mb-2">Literature Review / Market Research</h3>
-<p class="text-slate-400 text-sm leading-relaxed">
-Some research papers use machine learning to predict energy consumption, 
-but many solutions are complex, expensive, or not user-friendly. 
-Most systems do not provide simple insights that common users can easily understand.
-</p>
-</div>
-
-<div class="glass p-6 rounded-2xl border-r-4 border-purple-500/50">
-<h3 class="text-purple-400 font-bold text-sm mb-2">Research Gap / Innovation</h3>
-<p class="text-slate-400 text-sm leading-relaxed">
-Enerlytics provides a lightweight, interpretable Multiple Linear Regression model 
-with real-time visualization and cost estimation for practical users.
-</p>
-</div>
-</div>
 </section>
 
-<!-- METHODOLOGY -->
+<!-- LITERATURE REVIEW -->
+<section class="glass p-8 rounded-3xl border-l-4 border-blue-500">
+<h2 class="text-blue-400 font-bold text-lg mb-3">Literature Review</h2>
+<p class="text-slate-400 text-sm">
+Some research papers use machine learning to predict energy consumption, but many solutions
+are complex, expensive, or not user-friendly.
+</p>
+</section>
+
+<!-- RESEARCH GAP -->
+<section class="glass p-8 rounded-3xl border-l-4 border-purple-500">
+<h2 class="text-purple-400 font-bold text-lg mb-3">Research Gap / Innovation</h2>
+<p class="text-slate-400 text-sm">
+Enerlytics provides a lightweight, interpretable Multiple Linear Regression model with
+real-time visualization and cost estimation for practical users.
+</p>
+</section>
+
+<!-- SYSTEM METHODOLOGY -->
 <section>
-<h2 class="text-3xl font-black text-center mb-12">
+<h2 class="text-4xl font-black text-center mb-16">
 System <span class="text-blue-500">Methodology</span>
 </h2>
 
 <div class="grid md:grid-cols-3 gap-8">
-<div class="glass p-6 rounded-2xl text-center">
-<i class="fas fa-database text-blue-500 text-2xl mb-3"></i>
-<h3 class="font-bold text-sm mb-2">Dataset</h3>
-<p class="text-slate-400 text-sm">365 daily records with temperature and energy values.</p>
+
+<div class="glass p-8 rounded-3xl text-center">
+<i class="fas fa-database text-blue-500 text-3xl mb-4"></i>
+<h3 class="font-bold mb-2">Dataset</h3>
+<p class="text-slate-400 text-sm">
+365 daily records with temperature and energy values.
+</p>
 </div>
 
-<div class="glass p-6 rounded-2xl text-center">
-<i class="fas fa-microchip text-purple-500 text-2xl mb-3"></i>
-<h3 class="font-bold text-sm mb-2">Model</h3>
-<p class="text-slate-400 text-sm">Multiple Linear Regression using Time + Temperature.</p>
+<div class="glass p-8 rounded-3xl text-center">
+<i class="fas fa-microchip text-purple-500 text-3xl mb-4"></i>
+<h3 class="font-bold mb-2">Model</h3>
+<p class="text-slate-400 text-sm">
+Multiple Linear Regression using Time + Temperature.
+</p>
 </div>
 
-<div class="glass p-6 rounded-2xl text-center">
-<i class="fab fa-github text-green-500 text-2xl mb-3"></i>
-<h3 class="font-bold text-sm mb-2">Repository</h3>
+<div class="glass p-8 rounded-3xl text-center">
+<i class="fab fa-github text-green-500 text-3xl mb-4"></i>
+<h3 class="font-bold mb-2">Repository</h3>
 <a href="https://github.com/NeevArora/enerlytics" target="_blank"
 class="bg-green-600 px-4 py-2 rounded-full text-xs font-bold hover:bg-green-500 transition">
 View GitHub
 </a>
 </div>
+
 </div>
 </section>
 
 <!-- RESULTS -->
-<section class="glass p-8 rounded-3xl">
-<h2 class="text-2xl font-bold mb-8 text-center">
+<section class="glass p-12 rounded-3xl">
+<h2 class="text-3xl font-black mb-12 text-center">
 Results & <span class="text-blue-500">Evaluation</span>
 </h2>
 
-<div class="grid md:grid-cols-2 gap-12 items-center">
-<div class="h-64">
+<div class="grid md:grid-cols-2 gap-16 items-center">
+
+<div class="h-72">
 <canvas id="resultsChart"></canvas>
 </div>
 
-<div>
-<div class="p-4 rounded-xl bg-white/5 border border-white/10 text-center">
-<div class="text-slate-400 text-xs uppercase mb-2">R² Score</div>
-<div class="text-3xl font-black text-blue-400">0.82</div>
+<div class="p-8 rounded-2xl bg-white/5 border border-white/10 text-center">
+<div class="text-slate-400 uppercase text-sm mb-3">R² Score</div>
+<div class="text-4xl font-black text-blue-400">0.82</div>
 </div>
-</div>
+
 </div>
 </section>
 
-<!-- TEAM -->
-<section class="text-center pt-10 border-t border-slate-800">
-<h3 class="text-xs uppercase tracking-widest text-slate-500 mb-8">Academic Credits</h3>
+<!-- EXPECTED OUTCOMES -->
+<section class="glass p-8 rounded-3xl">
+<h2 class="text-2xl font-bold mb-4">Expected Outcomes</h2>
+<ul class="list-disc list-inside text-slate-400 text-sm space-y-2">
+<li>Accurate daily energy prediction</li>
+<li>Monthly bill estimation</li>
+<li>Actual vs predicted comparison</li>
+<li>Cost awareness for users</li>
+</ul>
+</section>
 
-<div class="flex flex-wrap justify-center gap-10">
-<div class="glass px-8 py-6 rounded-2xl border-b-4 border-blue-600">
-<div class="text-xs text-blue-400 mb-2 uppercase">Project Guide</div>
-<div class="font-bold">Dr. Sakshi Shringi</div>
+<!-- LIMITATIONS -->
+<section class="glass p-8 rounded-3xl">
+<h2 class="text-2xl font-bold mb-4">Current Limitations</h2>
+<ul class="list-disc list-inside text-slate-400 text-sm space-y-2">
+<li>Only two features used (time index and temperature)</li>
+<li>Linear model cannot capture complex patterns</li>
+</ul>
+</section>
+
+<!-- FUTURE SCOPE -->
+<section class="glass p-8 rounded-3xl">
+<h2 class="text-2xl font-bold mb-4">Future Scope</h2>
+<ul class="list-disc list-inside text-slate-400 text-sm space-y-2">
+<li>Add more input features</li>
+<li>Use advanced ML models (Random Forest, LSTM)</li>
+<li>Real-time smart meter integration</li>
+</ul>
+</section>
+
+<!-- ✨ ACADEMIC CREDITS SECTION (Styled Like Screenshot) -->
+<section class="pt-20 border-t border-slate-800 text-center">
+<h3 class="text-xs uppercase tracking-[0.4em] text-slate-500 mb-12">
+ACADEMIC CREDITS
+</h3>
+
+<div class="flex flex-wrap justify-center gap-12">
+
+<!-- Guide Card -->
+<div class="glass px-16 py-10 rounded-3xl border-2 border-blue-500 shadow-lg shadow-blue-500/20">
+<p class="text-blue-400 uppercase text-sm mb-4 tracking-widest">
+Project Guide
+</p>
+<p class="text-2xl font-bold">
+Dr. Sakshi Shringi
+</p>
 </div>
 
-<div class="glass px-8 py-6 rounded-2xl border-b-4 border-slate-700">
-<div class="text-xs text-slate-400 mb-2 uppercase">Student</div>
-<div class="font-bold">Neev Arora</div>
-<div class="text-xs text-slate-500">2427030417</div>
+<!-- Student Card -->
+<div class="glass px-16 py-10 rounded-3xl border border-slate-700 shadow-md">
+<p class="text-slate-400 uppercase text-sm mb-4 tracking-widest">
+Student
+</p>
+<p class="text-2xl font-bold">
+Neev Arora
+</p>
+<p class="text-slate-500 text-sm mt-2">
+2427030417
+</p>
 </div>
+
 </div>
 </section>
 
 </main>
 
-<footer class="py-8 text-center text-slate-500 text-xs border-t border-slate-800">
+<footer class="py-8 text-center text-slate-500 text-xs border-t border-slate-800 mt-20">
 Manipal University Jaipur • Department of CSE • 2026
 </footer>
 
@@ -185,7 +249,7 @@ labels:['Model Accuracy'],
 datasets:[{
 data:[82],
 backgroundColor:'#3b82f6',
-borderRadius:12
+borderRadius:15
 }]
 },
 options:{
@@ -199,5 +263,3 @@ scales:{y:{beginAtZero:true,max:100}}
 
 </body>
 </html>
-
-
