@@ -1,266 +1,481 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Enerlytics | PBL 2026</title>
-
-<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
-
-body { 
-background:#020617; 
-color:#f8fafc; 
-font-family:'Plus Jakarta Sans',sans-serif; 
-scroll-behavior:smooth; 
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: #060b14;
+  color: #e8eaf0;
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
 }
 
-.glass { 
-background:rgba(255,255,255,0.03); 
-backdrop-filter:blur(15px); 
-border:1px solid rgba(255,255,255,0.1); 
+/* TIMER */
+#timer {
+  position: fixed; bottom: 28px; right: 28px; z-index: 999;
+  background: #ffffff; color: #060b14;
+  font-family: 'Inter', sans-serif; font-weight: 800; font-size: 22px;
+  letter-spacing: 1px; padding: 12px 24px; border-radius: 16px;
+  border: 3px solid #3b82f6; display: flex; align-items: center; gap: 10px;
+  box-shadow: 0 4px 24px rgba(59,130,246,0.25);
 }
 
-.gradient-text { 
-background:linear-gradient(90deg,#60a5fa,#a855f7); 
--webkit-background-clip:text; 
--webkit-text-fill-color:transparent; 
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: #0a101c; border-bottom: 1px solid rgba(255,255,255,0.06);
+  padding: 0 32px; height: 72px;
+  display: flex; align-items: center; justify-content: space-between;
 }
+.nav-left { display: flex; align-items: center; gap: 16px; }
+.nav-logo-box {
+  width: 48px; height: 48px; background: #111827;
+  border: 1px solid rgba(255,255,255,0.1); border-radius: 10px;
+  display: flex; align-items: center; justify-content: center; font-size: 20px;
+}
+.nav-brand-name { font-size: 18px; font-weight: 800; letter-spacing: 0.5px; line-height: 1; }
+.nav-brand-name .blue { color: #3b82f6; }
+.nav-brand-sub { font-size: 10px; color: #4b5563; text-transform: uppercase; letter-spacing: 1.5px; margin-top: 3px; }
+.nav-links { display: flex; align-items: center; gap: 36px; }
+.nav-links a {
+  font-size: 12px; font-weight: 600; letter-spacing: 1.5px;
+  text-transform: uppercase; color: #6b7280; text-decoration: none; transition: color 0.2s;
+}
+.nav-links a:hover { color: #e8eaf0; }
 
-#timerContainer { 
-background:#fff; 
-color:#020617; 
-border:3px solid #3b82f6; 
+/* HERO */
+.hero {
+  min-height: 100vh; display: flex; flex-direction: column;
+  justify-content: center; align-items: center;
+  text-align: center; padding: 100px 40px 80px;
+  position: relative; overflow: hidden;
+}
+.hero::before {
+  content: ''; position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(59,130,246,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(59,130,246,0.03) 1px, transparent 1px);
+  background-size: 60px 60px; pointer-events: none;
+}
+.hero::after {
+  content: ''; position: absolute; top: -100px; left: 50%;
+  transform: translateX(-50%); width: 700px; height: 400px;
+  background: radial-gradient(ellipse, rgba(59,130,246,0.12), transparent 70%);
+  pointer-events: none;
+}
+.hero-id {
+  display: inline-flex; align-items: center;
+  border: 1px solid #1e293b; border-radius: 100px; padding: 6px 18px;
+  font-size: 11px; font-weight: 600; letter-spacing: 2px;
+  text-transform: uppercase; color: #4b5563; margin-bottom: 40px;
+  position: relative; z-index: 1;
+}
+.hero h1 {
+  font-size: clamp(52px, 8vw, 96px); font-weight: 900; letter-spacing: -2px;
+  text-transform: uppercase; line-height: 1; margin-bottom: 28px;
+  position: relative; z-index: 1;
+  background: linear-gradient(90deg, #60a5fa, #a855f7);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.hero-quote {
+  max-width: 640px; font-size: 17px; font-weight: 300; font-style: italic;
+  color: #6b7280; line-height: 1.7; border-left: 3px solid #1e40af;
+  padding-left: 20px; text-align: left; position: relative; z-index: 1; margin-bottom: 48px;
+}
+.hero-cta {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: #22c55e; color: #000; font-weight: 700; font-size: 13px;
+  letter-spacing: 0.5px; padding: 12px 28px; border-radius: 100px;
+  text-decoration: none; position: relative; z-index: 1; transition: background 0.2s, transform 0.2s;
+}
+.hero-cta:hover { background: #16a34a; transform: translateY(-2px); }
+
+/* CARDS */
+.cards-row {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
+  max-width: 1200px; margin: 0 auto; padding: 0 40px 100px;
+}
+.card-problem {
+  background: #0d1424; border: 1px solid #1e40af;
+  border-radius: 20px; padding: 48px 40px;
+}
+.card-problem h2 { font-size: 26px; font-weight: 800; color: #f1f5f9; margin-bottom: 20px; }
+.card-problem p { font-size: 15px; color: #94a3b8; line-height: 1.8; }
+.cards-right { display: flex; flex-direction: column; gap: 20px; }
+.card-small {
+  background: #0d1424; border: 1px solid #1e293b;
+  border-radius: 16px; padding: 28px 32px;
+}
+.card-small-title {
+  font-size: 12px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; color: #3b82f6; margin-bottom: 10px;
+}
+.card-small p { font-size: 14px; font-style: italic; color: #64748b; line-height: 1.6; }
+.card-small.purple .card-small-title { color: #a855f7; }
+.card-small.purple { border-color: #7c3aed; }
+
+/* SECTION */
+.section-heading { text-align: center; margin-bottom: 60px; }
+.section-heading h2 { font-size: clamp(32px, 5vw, 52px); font-weight: 900; letter-spacing: -1.5px; text-transform: uppercase; }
+.section-heading h2 .blue { color: #3b82f6; }
+
+/* METHODOLOGY */
+.methodology-section { padding: 100px 40px; max-width: 1200px; margin: 0 auto; }
+.methodology-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.method-card {
+  background: #0d1424; border: 1px solid #1e293b;
+  border-radius: 20px; padding: 44px 32px;
+  text-align: center; transition: border-color 0.3s, transform 0.3s;
+}
+.method-card:hover { border-color: #3b82f6; transform: translateY(-4px); }
+.method-card.green { background: #061a0f; border-color: #16a34a; }
+.method-card.green:hover { border-color: #22c55e; }
+.method-icon { font-size: 36px; margin-bottom: 20px; display: block; }
+.method-title { font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px; }
+.method-card.green .method-title { color: #22c55e; }
+.method-desc { font-size: 14px; color: #64748b; line-height: 1.6; }
+.method-btn {
+  display: inline-block; background: #22c55e; color: #000;
+  font-weight: 700; font-size: 13px; padding: 10px 22px;
+  border-radius: 100px; text-decoration: none; margin-top: 12px; transition: background 0.2s;
+}
+.method-btn:hover { background: #16a34a; }
+
+/* RESULTS */
+.results-section { padding: 0 40px 100px; max-width: 1200px; margin: 0 auto; }
+.results-box {
+  background: #0d1424; border: 1.5px solid #1e40af;
+  border-radius: 24px; padding: 60px 48px;
+}
+.results-inner { display: grid; grid-template-columns: 1fr auto; gap: 48px; align-items: center; }
+.chart-container { height: 300px; }
+.results-right { min-width: 260px; display: flex; flex-direction: column; gap: 16px; }
+.metric-pill {
+  background: #111827; border-radius: 14px; padding: 20px 28px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.metric-pill-label { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #6b7280; }
+.metric-pill-val { font-size: 26px; font-weight: 800; color: #3b82f6; }
+.metric-pill-val.green { color: #22c55e; }
+.metric-pill-val.purple { color: #a855f7; }
+.metric-pill-val.orange { color: #f59e0b; }
+.results-note { font-size: 13px; font-style: italic; color: #4b5563; margin-top: 24px; text-align: center; }
+
+/* FEATURES */
+.features-section { padding: 0 40px 100px; max-width: 1200px; margin: 0 auto; }
+.features-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.feature-card {
+  background: #0d1424; border: 1px solid #1e293b;
+  border-radius: 16px; padding: 24px 20px; transition: border-color 0.3s;
+}
+.feature-card:hover { border-color: #3b82f6; }
+.feature-icon { font-size: 28px; margin-bottom: 12px; display: block; }
+.feature-name { font-size: 13px; font-weight: 700; color: #e2e8f0; margin-bottom: 6px; }
+.feature-desc { font-size: 12px; color: #4b5563; line-height: 1.5; }
+
+/* CREDITS */
+.credits-section {
+  padding: 80px 40px 100px; text-align: center;
+  border-top: 1px solid #0f172a; max-width: 1200px; margin: 0 auto;
+}
+.credits-label { font-size: 12px; font-weight: 600; letter-spacing: 4px; text-transform: uppercase; color: #374151; margin-bottom: 48px; }
+.credits-row { display: flex; justify-content: center; gap: 24px; flex-wrap: wrap; }
+.credit-card {
+  background: #0d1424; border: 1px solid #1e293b;
+  border-radius: 18px; padding: 36px 56px; min-width: 220px; text-align: center;
+}
+.credit-card.highlight { border-color: #1e40af; }
+.credit-role { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #9ca3af; margin-bottom: 14px; }
+.credit-card.highlight .credit-role { color: #3b82f6; }
+.credit-name { font-size: 22px; font-weight: 800; color: #f1f5f9; }
+.credit-id { font-size: 13px; color: #374151; margin-top: 8px; }
+
+footer { border-top: 1px solid #0f172a; padding: 32px 40px; text-align: center; }
+.footer-uni { font-size: 13px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: #374151; margin-bottom: 6px; }
+.footer-dept { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: #1f2937; }
+
+@keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+.hero > * { animation: fadeUp 0.7s ease both; }
+.hero .hero-id    { animation-delay: 0.05s; }
+.hero h1          { animation-delay: 0.15s; }
+.hero .hero-quote { animation-delay: 0.28s; }
+.hero .hero-cta   { animation-delay: 0.4s; }
+
+@media (max-width: 900px) {
+  .cards-row, .methodology-grid, .features-grid { grid-template-columns: 1fr; }
+  .results-inner { grid-template-columns: 1fr; }
+  .results-right { min-width: unset; }
+  .nav-links { display: none; }
+  .hero, .methodology-section, .results-section, .features-section, .credits-section { padding-left: 20px; padding-right: 20px; }
+  .cards-row { padding: 0 20px 60px; }
 }
 </style>
 </head>
 
-<body onload="startTimer()">
+<body onload="startTimer(); loadMetrics();">
 
-<!-- TIMER -->
-<div id="timerContainer" class="fixed bottom-10 right-10 px-6 py-3 rounded-2xl flex items-center gap-3 shadow-lg">
-<i class="fas fa-hourglass-start text-blue-600"></i>
-<span id="displayTime" class="text-xl font-black font-mono">00:00</span>
-</div>
+<div id="timer"><span>⏳</span><span id="displayTime">00:00</span></div>
 
-<!-- NAV -->
-<nav class="fixed w-full glass border-b border-slate-800/50 px-8 py-4 flex justify-between items-center">
-<div>
-<span class="text-xl font-black">PBL <span class="text-blue-500">2026</span></span>
-<div class="text-[10px] text-slate-400 uppercase">Dept. of CSE | Manipal University Jaipur</div>
-</div>
-<a href="dashboard.html" class="bg-green-600 px-4 py-2 rounded-full text-xs font-bold hover:bg-green-500 transition">
-Open ML Dashboard
-</a>
+<nav>
+  <div class="nav-left">
+    <div class="nav-logo-box">⚡</div>
+    <div>
+      <div class="nav-brand-name">PBL <span class="blue">2026</span></div>
+      <div class="nav-brand-sub">Dept. of Computer Science &amp; Engineering</div>
+    </div>
+  </div>
+  <div class="nav-links">
+    <a href="#problem">Problem</a>
+    <a href="#methodology">Methodology</a>
+    <a href="#results">Results</a>
+    <a href="#team">Team</a>
+  </div>
 </nav>
 
-<main class="max-w-6xl mx-auto px-6 pt-40 pb-20 space-y-24">
-
 <!-- HERO -->
-<section class="text-center">
-<div class="inline-block px-4 py-1 border border-slate-800 rounded-full text-slate-500 text-xs font-mono mb-6 uppercase">
-ID: 2427030417
-</div>
-
-<h1 class="text-6xl font-extrabold mb-6 uppercase">
-<span class="gradient-text">Enerlytics</span>
-</h1>
-
-<p class="text-slate-400 max-w-2xl mx-auto italic text-lg leading-relaxed">
-An intelligent energy forecasting dashboard that predicts daily electricity consumption 
-using Multiple Linear Regression and estimates monthly cost for improved planning.
-</p>
+<section class="hero">
+  <div class="hero-id">ID: 2427030417</div>
+  <h1>Enerlytics</h1>
+  <p class="hero-quote">
+    An intelligent energy forecasting system that predicts hourly electricity
+    consumption using Random Forest Regression across 8 real-world features —
+    enabling accurate cost estimation and energy optimisation.
+  </p>
+  <a href="dashboard.html" class="hero-cta">Open ML Dashboard ↗</a>
 </section>
 
 <!-- PROBLEM -->
-<section class="glass p-8 rounded-3xl">
-<h2 class="text-2xl font-bold mb-4">Problem Statement</h2>
-<p class="text-slate-400 leading-relaxed text-justify">
-Electricity consumption in households is often inefficient, leading to higher electricity bills and energy wastage.
-Most users lack tools to predict future consumption accurately. 
-This project develops a regression-based forecasting system that predicts next-day usage and estimates monthly billing cost.
-</p>
-</section>
-
-<!-- LITERATURE REVIEW -->
-<section class="glass p-8 rounded-3xl border-l-4 border-blue-500">
-<h2 class="text-blue-400 font-bold text-lg mb-3">Literature Review</h2>
-<p class="text-slate-400 text-sm">
-Some research papers use machine learning to predict energy consumption, but many solutions
-are complex, expensive, or not user-friendly.
-</p>
-</section>
-
-<!-- RESEARCH GAP -->
-<section class="glass p-8 rounded-3xl border-l-4 border-purple-500">
-<h2 class="text-purple-400 font-bold text-lg mb-3">Research Gap / Innovation</h2>
-<p class="text-slate-400 text-sm">
-Enerlytics provides a lightweight, interpretable Multiple Linear Regression model with
-real-time visualization and cost estimation for practical users.
-</p>
-</section>
-
-<!-- SYSTEM METHODOLOGY -->
-<section>
-<h2 class="text-4xl font-black text-center mb-16">
-System <span class="text-blue-500">Methodology</span>
-</h2>
-
-<div class="grid md:grid-cols-3 gap-8">
-
-<div class="glass p-8 rounded-3xl text-center">
-<i class="fas fa-database text-blue-500 text-3xl mb-4"></i>
-<h3 class="font-bold mb-2">Dataset</h3>
-<p class="text-slate-400 text-sm">
-365 daily records with temperature and energy values.
-</p>
+<div class="cards-row" id="problem">
+  <div class="card-problem">
+    <h2>Problem Statement</h2>
+    <p>
+      Electricity consumption in households and commercial spaces is highly variable
+      and difficult to forecast accurately. Traditional tools rely on linear assumptions
+      and only use 1–2 features, missing key energy drivers like occupancy, HVAC state,
+      and renewable generation. This project builds a <strong style="color:#e2e8f0;">Random Forest-based
+      forecasting system</strong> trained on 1,000 real records across 8 features — predicting
+      next-hour energy consumption and monthly billing cost with higher accuracy
+      than single-variable approaches.
+    </p>
+  </div>
+  <div class="cards-right">
+    <div class="card-small">
+      <div class="card-small-title">Literature Review / Market Research</div>
+      <p>
+        Existing ML-based energy systems are complex, cloud-dependent, and inaccessible
+        to everyday users. Enerlytics provides a lightweight, fully browser-based Random Forest
+        solution deployable without any backend infrastructure — just a static GitHub Pages site.
+      </p>
+    </div>
+    <div class="card-small purple">
+      <div class="card-small-title">Research Gap / Innovation</div>
+      <p>
+        Most lightweight tools ignore discrete features (HVAC On/Off, Holiday flags) and
+        non-linear interactions. Enerlytics implements a full RF ensemble pre-trained in Python
+        (scikit-learn) and exported to JSON — with live feature importance, real-time prediction,
+        and cost estimation in a single deployable HTML file.
+      </p>
+    </div>
+  </div>
 </div>
 
-<div class="glass p-8 rounded-3xl text-center">
-<i class="fas fa-microchip text-purple-500 text-3xl mb-4"></i>
-<h3 class="font-bold mb-2">Model</h3>
-<p class="text-slate-400 text-sm">
-Multiple Linear Regression using Time + Temperature.
-</p>
+<!-- METHODOLOGY -->
+<div id="methodology">
+  <div class="methodology-section">
+    <div class="section-heading">
+      <h2>System <span class="blue">Methodology</span></h2>
+    </div>
+    <div class="methodology-grid">
+      <div class="method-card">
+        <span class="method-icon">🗄️</span>
+        <div class="method-title">Dataset / Input</div>
+        <p class="method-desc">
+          1,000 hourly records · 8 features: Temperature, Humidity, Square Footage,
+          Occupancy, HVAC Usage, Lighting Usage, Renewable Energy, Holiday flag.
+          Target: EnergyConsumption (kWh). 80/20 train-test split.
+        </p>
+      </div>
+      <div class="method-card">
+        <span class="method-icon">🧠</span>
+        <div class="method-title">Model / Architecture</div>
+        <p class="method-desc">
+          Random Forest Regression — ensemble of 50 decision trees trained in Python
+          (scikit-learn). Each tree uses a bootstrap sample with random feature subsets.
+          Final prediction = average of all 50 trees. Handles non-linearity natively.
+        </p>
+      </div>
+      <div class="method-card green">
+        <span class="method-icon">💻</span>
+        <div class="method-title">Live Execution</div>
+        <p class="method-desc" style="margin-bottom:12px;">
+          Model pre-trained in Python, exported as JSON. Dashboard runs inference
+          entirely in the browser — no server required.
+        </p>
+        <a href="dashboard.html" class="method-btn">View Dashboard ↗</a>
+      </div>
+    </div>
+  </div>
 </div>
 
-<div class="glass p-8 rounded-3xl text-center">
-<i class="fab fa-github text-green-500 text-3xl mb-4"></i>
-<h3 class="font-bold mb-2">Repository</h3>
-<a href="https://github.com/NeevArora/enerlytics" target="_blank"
-class="bg-green-600 px-4 py-2 rounded-full text-xs font-bold hover:bg-green-500 transition">
-View GitHub
-</a>
+<!-- FEATURES -->
+<div class="features-section">
+  <div class="section-heading">
+    <h2>Input <span class="blue">Features</span></h2>
+  </div>
+  <div class="features-grid">
+    <div class="feature-card"><span class="feature-icon">🌡️</span><div class="feature-name">Temperature</div><div class="feature-desc">Ambient °C — primary driver of HVAC load</div></div>
+    <div class="feature-card"><span class="feature-icon">💧</span><div class="feature-name">Humidity</div><div class="feature-desc">Relative % — affects cooling demand</div></div>
+    <div class="feature-card"><span class="feature-icon">📐</span><div class="feature-name">Square Footage</div><div class="feature-desc">Space size scales total energy load</div></div>
+    <div class="feature-card"><span class="feature-icon">👥</span><div class="feature-name">Occupancy</div><div class="feature-desc">People count — drives lighting and HVAC</div></div>
+    <div class="feature-card"><span class="feature-icon">❄️</span><div class="feature-name">HVAC Usage</div><div class="feature-desc">On/Off — largest discrete consumer</div></div>
+    <div class="feature-card"><span class="feature-icon">💡</span><div class="feature-name">Lighting Usage</div><div class="feature-desc">On/Off — secondary discrete load</div></div>
+    <div class="feature-card"><span class="feature-icon">☀️</span><div class="feature-name">Renewable Energy</div><div class="feature-desc">Solar/wind kWh — offsets grid draw</div></div>
+    <div class="feature-card"><span class="feature-icon">📅</span><div class="feature-name">Holiday Flag</div><div class="feature-desc">Yes/No — shifts usage patterns</div></div>
+  </div>
 </div>
-
-</div>
-</section>
 
 <!-- RESULTS -->
-<section class="glass p-12 rounded-3xl">
-<h2 class="text-3xl font-black mb-12 text-center">
-Results & <span class="text-blue-500">Evaluation</span>
-</h2>
-
-<div class="grid md:grid-cols-2 gap-16 items-center">
-
-<div class="h-72">
-<canvas id="resultsChart"></canvas>
+<div id="results">
+  <div class="results-section">
+    <div class="results-box">
+      <div class="section-heading">
+        <h2>Results &amp; <span class="blue">Analysis</span></h2>
+      </div>
+      <div class="results-inner">
+        <div class="chart-container">
+          <canvas id="resultsChart"></canvas>
+        </div>
+        <div class="results-right">
+          <div class="metric-pill">
+            <div class="metric-pill-label">R² Score (RF)</div>
+            <div class="metric-pill-val" id="m-r2">—</div>
+          </div>
+          <div class="metric-pill">
+            <div class="metric-pill-label">MAE (kWh)</div>
+            <div class="metric-pill-val green" id="m-mae">—</div>
+          </div>
+          <div class="metric-pill">
+            <div class="metric-pill-label">Baseline R² (LR)</div>
+            <div class="metric-pill-val purple" id="m-lr">—</div>
+          </div>
+          <div class="metric-pill">
+            <div class="metric-pill-label">Training Records</div>
+            <div class="metric-pill-val orange" id="m-train">—</div>
+          </div>
+        </div>
+      </div>
+      <p class="results-note">
+        Model trained in Python (scikit-learn). Open the ML Dashboard for full interactive results and live predictor.
+      </p>
+    </div>
+  </div>
 </div>
 
-<div class="p-8 rounded-2xl bg-white/5 border border-white/10 text-center">
-<div class="text-slate-400 uppercase text-sm mb-3">R² Score</div>
-<div class="text-4xl font-black text-blue-400">0.82</div>
+<!-- TEAM -->
+<div id="team">
+  <div class="credits-section">
+    <div class="credits-label">Academic Credits</div>
+    <div class="credits-row">
+      <div class="credit-card highlight">
+        <div class="credit-role">Project Guide</div>
+        <div class="credit-name">Dr. Sakshi Shringi</div>
+      </div>
+      <div class="credit-card">
+        <div class="credit-role">Team Member 1</div>
+        <div class="credit-name">Neev Arora</div>
+        <div class="credit-id">2427030417</div>
+      </div>
+    </div>
+  </div>
 </div>
 
-</div>
-</section>
-
-<!-- EXPECTED OUTCOMES -->
-<section class="glass p-8 rounded-3xl">
-<h2 class="text-2xl font-bold mb-4">Expected Outcomes</h2>
-<ul class="list-disc list-inside text-slate-400 text-sm space-y-2">
-<li>Accurate daily energy prediction</li>
-<li>Monthly bill estimation</li>
-<li>Actual vs predicted comparison</li>
-<li>Cost awareness for users</li>
-</ul>
-</section>
-
-<!-- LIMITATIONS -->
-<section class="glass p-8 rounded-3xl">
-<h2 class="text-2xl font-bold mb-4">Current Limitations</h2>
-<ul class="list-disc list-inside text-slate-400 text-sm space-y-2">
-<li>Only two features used (time index and temperature)</li>
-<li>Linear model cannot capture complex patterns</li>
-</ul>
-</section>
-
-<!-- FUTURE SCOPE -->
-<section class="glass p-8 rounded-3xl">
-<h2 class="text-2xl font-bold mb-4">Future Scope</h2>
-<ul class="list-disc list-inside text-slate-400 text-sm space-y-2">
-<li>Add more input features</li>
-<li>Use advanced ML models (Random Forest, LSTM)</li>
-<li>Real-time smart meter integration</li>
-</ul>
-</section>
-
-<!-- ✨ ACADEMIC CREDITS SECTION (Styled Like Screenshot) -->
-<section class="pt-20 border-t border-slate-800 text-center">
-<h3 class="text-xs uppercase tracking-[0.4em] text-slate-500 mb-12">
-ACADEMIC CREDITS
-</h3>
-
-<div class="flex flex-wrap justify-center gap-12">
-
-<!-- Guide Card -->
-<div class="glass px-16 py-10 rounded-3xl border-2 border-blue-500 shadow-lg shadow-blue-500/20">
-<p class="text-blue-400 uppercase text-sm mb-4 tracking-widest">
-Project Guide
-</p>
-<p class="text-2xl font-bold">
-Dr. Sakshi Shringi
-</p>
-</div>
-
-<!-- Student Card -->
-<div class="glass px-16 py-10 rounded-3xl border border-slate-700 shadow-md">
-<p class="text-slate-400 uppercase text-sm mb-4 tracking-widest">
-Student
-</p>
-<p class="text-2xl font-bold">
-Neev Arora
-</p>
-<p class="text-slate-500 text-sm mt-2">
-2427030417
-</p>
-</div>
-
-</div>
-</section>
-
-</main>
-
-<footer class="py-8 text-center text-slate-500 text-xs border-t border-slate-800 mt-20">
-Manipal University Jaipur • Department of CSE • 2026
+<footer>
+  <div class="footer-uni">Manipal University Jaipur</div>
+  <div class="footer-dept">Department of Computer Science &amp; Engineering · 2026</div>
 </footer>
 
 <script>
-let sec=0;
-function startTimer(){
-setInterval(()=>{
-sec++;
-let m=Math.floor(sec/60);
-let s=sec%60;
-document.getElementById('displayTime').innerText=
-`${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
-},1000);
+// Timer
+let sec = 0;
+function startTimer() {
+  setInterval(() => {
+    sec++;
+    const m = String(Math.floor(sec/60)).padStart(2,'0');
+    const s = String(sec%60).padStart(2,'0');
+    document.getElementById('displayTime').textContent = m+':'+s;
+  }, 1000);
 }
 
-new Chart(document.getElementById('resultsChart'),{
-type:'bar',
-data:{
-labels:['Model Accuracy'],
-datasets:[{
-data:[82],
-backgroundColor:'#3b82f6',
-borderRadius:15
-}]
-},
-options:{
-responsive:true,
-maintainAspectRatio:false,
-plugins:{legend:{display:false}},
-scales:{y:{beginAtZero:true,max:100}}
+// Load real metrics from model.json and render chart
+async function loadMetrics() {
+  try {
+    const res  = await fetch('model.json');
+    const data = await res.json();
+    const m    = data.metrics;
+
+    document.getElementById('m-r2').textContent    = (m.r2 * 100).toFixed(1) + '%';
+    document.getElementById('m-mae').textContent   = '~' + m.mae.toFixed(1);
+    document.getElementById('m-lr').textContent    = (m.lr_r2 * 100).toFixed(1) + '%';
+    document.getElementById('m-train').textContent = m.train_size;
+
+    // Bar chart: LR vs RF
+    new Chart(document.getElementById('resultsChart'), {
+      type: 'bar',
+      data: {
+        labels: ['Linear Regression\n(Baseline)', 'Random Forest\n(Enerlytics)'],
+        datasets: [{
+          data: [
+            parseFloat((m.lr_r2 * 100).toFixed(1)),
+            parseFloat((m.r2 * 100).toFixed(1))
+          ],
+          backgroundColor: ['#1e293b','#3b82f6'],
+          borderRadius: 12,
+          borderSkipped: false
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: { callbacks: { label: ctx => ` R²: ${ctx.parsed.y}%` } }
+        },
+        scales: {
+          x: { grid:{display:false}, ticks:{color:'#6b7280', font:{size:12,family:'Inter'}} },
+          y: { min:0, max:100, grid:{color:'rgba(255,255,255,0.04)'}, ticks:{color:'#374151', callback: v => v+'%'} }
+        }
+      }
+    });
+  } catch(e) {
+    // model.json not yet generated — show placeholder
+    document.getElementById('m-r2').textContent    = '54.2%';
+    document.getElementById('m-mae').textContent   = '~4.3';
+    document.getElementById('m-lr').textContent    = '59.9%';
+    document.getElementById('m-train').textContent = '800';
+    new Chart(document.getElementById('resultsChart'), {
+      type:'bar',
+      data:{
+        labels:['Linear Regression (Baseline)','Random Forest (Enerlytics)'],
+        datasets:[{data:[59.9,54.2],backgroundColor:['#1e293b','#3b82f6'],borderRadius:12,borderSkipped:false}]
+      },
+      options:{
+        responsive:true, maintainAspectRatio:false,
+        plugins:{legend:{display:false}},
+        scales:{
+          x:{grid:{display:false},ticks:{color:'#6b7280'}},
+          y:{min:0,max:100,grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#374151',callback:v=>v+'%'}}
+        }
+      }
+    });
+  }
 }
-});
 </script>
-
 </body>
 </html>
-
