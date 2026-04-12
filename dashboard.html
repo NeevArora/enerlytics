@@ -88,7 +88,7 @@ main { padding: 40px 48px; display: flex; flex-direction: column; gap: 48px; ove
 .kpi-card.ok        { border-color: rgba(34,197,94,0.25); }
 .kpi-card.warn-c    { border-color: rgba(245,158,11,0.25); }
 .kpi-label { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: var(--muted); margin-bottom: 12px; }
-.kpi-val { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 28px; letter-spacing: -0.5px; }
+.kpi-val { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 30px; letter-spacing: -0.5px; }
 .kpi-val.green  { color: var(--success); }
 .kpi-val.volt   { color: var(--volt); }
 .kpi-val.purple { color: #a78bfa; }
@@ -117,8 +117,17 @@ main { padding: 40px 48px; display: flex; flex-direction: column; gap: 48px; ove
 .imp-row { display: grid; grid-template-columns: 140px 1fr 60px; align-items: center; gap: 12px; font-size: 12px; }
 .imp-name { color: #aaa; }
 .imp-bar-wrap { background: rgba(255,255,255,0.05); border-radius: 100px; height: 8px; overflow: hidden; }
-.imp-bar-fill { height: 100%; background: linear-gradient(90deg, var(--volt), #7c3aed); border-radius: 100px; transition: width 1s ease; }
-.imp-pct { font-family: 'DM Mono', monospace; color: var(--volt); text-align: right; }
+.imp-bar-fill {
+  height: 100%;
+  background: #ffffff;
+  border-radius: 100px;
+  transition: width 1s ease;
+}
+.imp-pct {
+  font-family: 'DM Mono', monospace;
+  color: #ffffff;
+  text-align: right;
+}
 
 /* PREDICTOR */
 .predictor-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
@@ -141,10 +150,21 @@ main { padding: 40px 48px; display: flex; flex-direction: column; gap: 48px; ove
   text-align: center; gap: 20px;
 }
 .result-label { font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: var(--muted); }
-.result-value { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 56px; letter-spacing: -2px; color: var(--volt); line-height: 1; }
+.result-value {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 64px;   /* slightly bigger */
+  letter-spacing: -2px;
+  color: #ffffff;    /* WHITE */
+  line-height: 1;
+}
 .result-unit  { font-size: 14px; color: #555; margin-top: -8px; }
 .result-cost  { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 22px; color: #a78bfa; }
-.result-monthly { font-size: 13px; color: #555; }
+.result-monthly {
+  font-size: 18px;
+  color: #aaa;
+  font-weight: 500;
+}
 
 /* BUTTONS */
 .btn { padding: 12px 24px; border-radius: 12px; font-size: 13px; font-family: 'Syne', sans-serif; font-weight: 700; cursor: pointer; border: none; transition: all 0.2s; }
@@ -233,10 +253,10 @@ main { padding: 40px 48px; display: flex; flex-direction: column; gap: 48px; ove
   <div id="sec-metrics">
     <div class="sec-header"><h2>1. Model Performance</h2><span class="badge">scikit-learn · Python</span></div>
     <div class="kpi-grid">
-      <div class="kpi-card highlight"><div class="kpi-label">R² Score</div><div class="kpi-val volt" id="kpiR2">—</div><div class="kpi-sub">Variance explained by model</div></div>
-      <div class="kpi-card ok"><div class="kpi-label">MAE (kWh)</div><div class="kpi-val green" id="kpiMAE">—</div><div class="kpi-sub">Mean Absolute Error on test set</div></div>
-      <div class="kpi-card"><div class="kpi-label">RMSE (kWh)</div><div class="kpi-val purple" id="kpiRMSE">—</div><div class="kpi-sub">Root Mean Squared Error</div></div>
-      <div class="kpi-card warn-c"><div class="kpi-label">Avg Consumption</div><div class="kpi-val orange" id="kpiAvg">—</div><div class="kpi-sub">Mean kWh across all records</div></div>
+      <div class="kpi-card highlight"><div class="kpi-label">R² Score</div><div class="kpi-val white" id="kpiR2">—</div><div class="kpi-sub">Variance explained by model</div></div>
+      <div class="kpi-card ok"><div class="kpi-label">MAE (kWh)</div><div class="kpi-val white" id="kpiMAE">—</div><div class="kpi-sub">Mean Absolute Error on test set</div></div>
+      <div class="kpi-card"><div class="kpi-label">RMSE (kWh)</div><div class="kpi-val white" id="kpiRMSE">—</div><div class="kpi-sub">Root Mean Squared Error</div></div>
+      <div class="kpi-card warn-c"><div class="kpi-label">Avg Consumption</div><div class="kpi-val white" id="kpiAvg">—</div><div class="kpi-sub">Mean kWh across all records</div></div>
       <div class="kpi-card"><div class="kpi-label">Training Samples</div><div class="kpi-val" id="kpiTrain">—</div><div class="kpi-sub">Records used for training</div></div>
       <div class="kpi-card"><div class="kpi-label">Test Samples</div><div class="kpi-val" id="kpiTest">—</div><div class="kpi-sub">Records held out for testing</div></div>
     </div>
@@ -368,7 +388,7 @@ async function loadModel() {
 
     document.getElementById('loadingScreen').style.display = 'none';
     document.getElementById('appLayout').style.display = 'grid';
-    document.getElementById('statusText').textContent = `Model loaded · R²=${modelData.metrics.r2}`;
+    document.getElementById('statusText').textContent = `Model loaded · R²=${modelData.metrics.r2.toFixed(4)}`;
 
   } catch(e) {
     text.textContent = '❌ model.json missing — run train_and_export.py first';
@@ -383,14 +403,14 @@ function populateKPIs() {
   document.getElementById('kpiR2').textContent    = m.r2.toFixed(4);
   document.getElementById('kpiMAE').textContent   = m.mae.toFixed(2);
   document.getElementById('kpiRMSE').textContent  = m.rmse.toFixed(2);
-  document.getElementById('kpiAvg').textContent   = m.avg_consumption + ' kWh';
+  document.getElementById('kpiAvg').textContent = m.avg_consumption.toFixed(2) + ' kWh';
   document.getElementById('kpiTrain').textContent = m.train_size;
   document.getElementById('kpiTest').textContent  = m.test_size;
   document.getElementById('infoTrees').textContent = m.n_trees || forest.length;
   document.getElementById('infoDepth').textContent = m.max_depth || 6;
 
   const r2El = document.getElementById('kpiR2');
-  r2El.className = 'kpi-val ' + (m.r2 > 0.7 ? 'volt' : m.r2 > 0.5 ? 'orange' : 'danger');
+  r2El.className = 'kpi-val ' + (m.r2 > 0.7 ? 'white' : m.r2 > 0.5 ? 'orange' : 'danger');
 }
 
 // ── Charts ─────────────────────────────────────────────────
@@ -439,7 +459,7 @@ function renderCharts() {
       datasets: [{
         label: 'R² Score',
         data: [parseFloat((m.lr_r2*100).toFixed(1)), parseFloat((m.r2*100).toFixed(1))],
-        backgroundColor: ['#1e293b', '#c8ff00'],
+        backgroundColor: ['#334155', '#a78bfa'],
         borderRadius: 10, borderSkipped: false
       }]
     },
